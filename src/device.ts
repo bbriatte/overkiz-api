@@ -92,9 +92,9 @@ export class APIDevice {
         return res;
     }
 
-    public async exec(info?: ExecutionInfo, ...commands: Command[]): Promise<boolean> {
+    public async exec(...commands: Command[]): Promise<boolean> {
         return this.api.exec({
-            ...info,
+            label: `${this.name}: ${commands.join('|')}`,
             actions: [{
                 deviceURL: this.URL,
                 commands: commands

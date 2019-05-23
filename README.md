@@ -59,7 +59,7 @@ async function changeName(): Promise<boolean> {
     const devices: APIDevice[] = await getAllWaterHeatingSystem(); // call the previous function
     const device = devices.find((d) => d.hasCommand('setName'));
     if(device !== undefined) {
-        return device.exec(undefined, {
+        return device.exec({
             name: 'setName',
             parameters: [
                 'HelloWorld'
