@@ -11,7 +11,7 @@ export class EventListener {
     private id?: string;
     readonly polling: PollingInfo;
     readonly api: API;
-    readonly callbacks: {[execId: string]: (event: RAWEvent) => void};
+    readonly callbacks: {[taskId: string]: (event: RAWEvent) => void};
 
     constructor(polling: PollingInfo, api: API) {
         this.polling = polling;
@@ -22,8 +22,8 @@ export class EventListener {
         }
     }
 
-    public listenStateChange(execId: string, callback: (event: RAWEvent) => void): void {
-        this.callbacks[execId] = callback;
+    public listenStateChange(taskId: string, callback: (event: RAWEvent) => void): void {
+        this.callbacks[taskId] = callback;
         this.registerEvents();
     }
 

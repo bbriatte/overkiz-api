@@ -1,6 +1,6 @@
 import {API} from './api';
 import {Entry} from './entry';
-import {Command, ExecutionInfo} from './execution';
+import {Command, Task} from './execution';
 import {RAWDefinition, Definition} from './definition';
 
 export interface RAWDevice {
@@ -41,6 +41,7 @@ export class APIDevice {
     readonly oid: string;
     readonly uiClass: string;
     readonly api: API;
+    private currentTask?: Task;
 
     constructor(device: RAWDevice, api: API) {
         this.createdAt = new Date(device.creationTime);
@@ -93,12 +94,19 @@ export class APIDevice {
     }
 
     public async exec(...commands: Command[]): Promise<boolean> {
-        return this.api.exec({
+        if(this.currentTask !== undefined) {
+            await this.currentTask.cancel();
+        }
+        this.currentTask = await this.api.exec({
             label: `${this.name}: ${commands.join('|')}`,
             actions: [{
                 deviceURL: this.URL,
                 commands: commands
             }]
         });
+        if(this.currentTask !== undefined) {
+            return this.currentTask.wait();
+        }
+        return false;
     }
 }

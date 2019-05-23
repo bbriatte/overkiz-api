@@ -3,9 +3,8 @@ import {RequestPromiseOptions} from 'request-promise';
 import {CookieJar, Response} from 'request';
 import {APIDevice, RAWDevice} from './device';
 import {RAWSetup, Setup} from './setup';
-import {Execution} from './execution';
+import {Execution, Task} from './execution';
 import {EventListener, PollingInfo} from './event-listener';
-import {EventState} from './event';
 
 export interface Config {
     readonly host: string;
@@ -16,10 +15,10 @@ export interface Config {
 
 export class API {
 
-    public readonly host: string;
-    public readonly user: string;
-    public readonly password: string;
-    private readonly eventListener: EventListener;
+    readonly host: string;
+    readonly user: string;
+    readonly password: string;
+    readonly eventListener: EventListener;
     private cookies?: CookieJar;
 
     constructor(config: Config) {
@@ -45,6 +44,10 @@ export class API {
         return this.req(request.post, path, options);
     }
 
+    public async delete(path: string, options?: RequestPromiseOptions): Promise<any> {
+        return this.req(request.delete, path, options);
+    }
+
     public async getDevices(): Promise<APIDevice[]> {
         const raw: RAWDevice[] = await this.get('setup/devices');
         if(Array.isArray(raw)) {
@@ -53,26 +56,14 @@ export class API {
         return [];
     }
 
-    public async exec(execution: Execution): Promise<boolean> {
+    public async exec(execution: Execution): Promise<Task | undefined> {
         const res = await this.post('exec/apply', {
             body: execution
         });
         if(res.execId !== undefined) {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    await this.eventListener.listenStateChange(res.execId, (event) => {
-                        if(event.newState === EventState.completed) {
-                            resolve(true);
-                        } else if(event.newState === EventState.failed) {
-                            resolve(false);
-                        }
-                    });
-                } catch(err) {
-                    reject(err);
-                }
-            });
+            return new Task(execution, res.execId, this);
         }
-        return false;
+        return undefined;
     }
 
     public async getSetup(): Promise<Setup> {
