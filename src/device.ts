@@ -63,9 +63,14 @@ export class APIDevice {
         this.api = api;
     }
 
-    public getState(name: string): Entry | undefined {
+    public getStateEntry(name: string): Entry | undefined {
         const index = this.indexOfState(name);
         return index >= 0 ? this.states[index] : undefined;
+    }
+
+    public getStateValue(name: string): any | undefined {
+        const entry = this.getStateEntry(name);
+        return entry !== undefined ? entry.value : undefined;
     }
 
     public hasCommand(name: string): boolean {
