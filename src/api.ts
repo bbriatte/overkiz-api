@@ -85,6 +85,7 @@ export class API {
                 });
             } catch(err) {
                 if(err.statusCode === 401) {
+                    this.cookies = undefined;
                     return await this.req(method, path, options);
                 }
                 throw err;
