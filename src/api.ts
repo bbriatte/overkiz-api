@@ -1,7 +1,7 @@
 import * as request from 'request-promise';
 import {RequestPromiseOptions} from 'request-promise';
 import {CookieJar, Response} from 'request';
-import {APIDevice, RAWDevice} from './device';
+import {APIObject, RAWObject} from './object';
 import {RAWSetup, Setup} from './setup';
 import {Execution, Task} from './execution';
 import {EventListener, PollingInfo} from './event-listener';
@@ -48,10 +48,10 @@ export class API {
         return this.req(request.delete, path, options);
     }
 
-    public async getDevices(): Promise<APIDevice[]> {
-        const raw: RAWDevice[] = await this.get('setup/devices');
+    public async getObjects(): Promise<APIObject[]> {
+        const raw: RAWObject[] = await this.get('setup/devices');
         if(Array.isArray(raw)) {
-            return raw.map((device) => new APIDevice(device, this));
+            return raw.map((obj) => new APIObject(obj, this));
         }
         return [];
     }

@@ -1,6 +1,6 @@
 export * from './definition';
 export * from './api';
-export * from './device';
+export * from './object';
 export * from './entry';
 export * from './event';
 export * from './event-listener';

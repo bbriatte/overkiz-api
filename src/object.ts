@@ -3,7 +3,7 @@ import {Entry} from './entry';
 import {Command, Task} from './execution';
 import {RAWDefinition, Definition} from './definition';
 
-export interface RAWDevice {
+export interface RAWObject {
     readonly creationTime: number;
     readonly lastUpdateTime: number;
     readonly label: string;
@@ -22,7 +22,7 @@ export interface RAWDevice {
     readonly uiClass: string;
 }
 
-export class APIDevice {
+export class APIObject {
 
     readonly createdAt: Date;
     readonly updatedAt: Date;
@@ -43,23 +43,23 @@ export class APIDevice {
     readonly api: API;
     private currentTask?: Task;
 
-    constructor(device: RAWDevice, api: API) {
-        this.createdAt = new Date(device.creationTime);
-        this.updatedAt = new Date(device.lastUpdateTime);
-        this.name = device.label;
-        this.URL = device.deviceURL;
-        this.shortcut = device.shortcut;
-        this.model = device.controllableName;
-        this.definition = new Definition(device.definition);
-        this.states = device.states;
-        this.attributes = device.attributes;
-        this.available = device.available;
-        this.enabled = device.enabled;
-        this.placeOID = device.placeOID;
-        this.widget = device.widget;
-        this.type = device.type;
-        this.oid = device.oid;
-        this.uiClass = device.uiClass;
+    constructor(object: RAWObject, api: API) {
+        this.createdAt = new Date(object.creationTime);
+        this.updatedAt = new Date(object.lastUpdateTime);
+        this.name = object.label;
+        this.URL = object.deviceURL;
+        this.shortcut = object.shortcut;
+        this.model = object.controllableName;
+        this.definition = new Definition(object.definition);
+        this.states = object.states;
+        this.attributes = object.attributes;
+        this.available = object.available;
+        this.enabled = object.enabled;
+        this.placeOID = object.placeOID;
+        this.widget = object.widget;
+        this.type = object.type;
+        this.oid = object.oid;
+        this.uiClass = object.uiClass;
         this.api = api;
     }
 
