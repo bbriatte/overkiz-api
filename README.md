@@ -1,6 +1,7 @@
 # overkiz-api
 
 [![npm version](https://badge.fury.io/js/overkiz-api.svg)](https://badge.fury.io/js/overkiz-api)
+[![npm downloads](https://badgen.net/npm/dt/overkiz-api)](https://badgen.net/npm/dt/overkiz-api)
 
 overkiz-api is a Node.js library that implements the Overkiz IoT API
 
@@ -33,7 +34,7 @@ fetchAllHouse()
 Get all devices of type 'WaterHeatingSystem'
 
 ```typescript
-async function getAllWaterHeatingSystem(): Promise<APIDevice[]> {
+async function getAllWaterHeatingSystem(): Promise<APIObject[]> {
     const api: API = new API({
         host: 'ha110-1.overkiz.com', // Cozytouch host
         user: 'XXX', // your user account
@@ -43,8 +44,8 @@ async function getAllWaterHeatingSystem(): Promise<APIDevice[]> {
             interval: 1000
         } 
     });
-    const devices: APIDevice[] = await api.getDevices();
-    return devices.filter((d) => d.uiClass === 'WaterHeatingSystem');
+    const objects: APIObject[] = await api.getObjects();
+    return objects.filter((o) => o.uiClass === 'WaterHeatingSystem');
 }
 // Execute the task
 getAllWaterHeatingSystem()
@@ -56,10 +57,10 @@ Change device name
 
 ```typescript
 async function changeName(): Promise<boolean> {
-    const devices: APIDevice[] = await getAllWaterHeatingSystem(); // call the previous function
-    const device = devices.find((d) => d.hasCommand('setName'));
-    if(device !== undefined) {
-        return device.exec({
+    const objects: APIObject[] = await getAllWaterHeatingSystem(); // call the previous function
+    const obj = objects.find((o) => o.hasCommand('setName'));
+    if(obj !== undefined) {
+        return obj.exec({
             name: 'setName',
             parameters: [
                 'HelloWorld'
