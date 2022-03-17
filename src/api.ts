@@ -5,26 +5,24 @@ import {APIObject, RAWObject} from './object';
 import {RAWSetup, Setup} from './setup';
 import {Execution, Task} from './execution';
 import {EventListener, PollingInfo} from './event-listener';
+import {PlatformLoginHandler} from "./platform-login-handler";
 
 export interface Config {
     readonly host: string;
-    readonly user: string;
-    readonly password: string;
     readonly polling: PollingInfo;
+    readonly platformLoginHandler: PlatformLoginHandler;
 }
 
 export class API {
 
     readonly host: string;
-    readonly user: string;
-    readonly password: string;
+    readonly platformLoginHandler: PlatformLoginHandler;
     readonly eventListener: EventListener;
     private cookies?: CookieJar;
 
     constructor(config: Config) {
         this.host = config.host;
-        this.user = config.user;
-        this.password = config.password;
+        this.platformLoginHandler = config.platformLoginHandler;
         this.eventListener = new EventListener(config.polling, this);
     }
 
@@ -98,11 +96,9 @@ export class API {
         let res = undefined;
         do {
             try {
+                const overkizLoginData = await this.platformLoginHandler.getLoginData();
                 res = await request.post(this.getURL('login'), {
-                    form: {
-                        userId: this.user,
-                        userPassword: this.password
-                    },
+                    form: overkizLoginData,
                     json: true,
                     transform: function(body: any, response: Response, resolveWithFullResponse?: boolean): any {
                         return {

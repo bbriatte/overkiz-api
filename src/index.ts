@@ -9,3 +9,6 @@ export * from './gateway';
 export * from './location';
 export * from './place';
 export * from './setup';
+export * from './platform-login-handler';
+export * from './default-login-handler';
+export * from './cozytouch-login-handler';
