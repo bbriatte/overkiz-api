@@ -16,8 +16,10 @@ Retrieves all house
 async function fetchAllHouse(): Promise<Setup> {
     const api: API = new API({
         host: 'ha110-1.overkiz.com', // Cozytouch host
-        user: 'XXX', // your user account
-        password: 'XXX', // your password
+        platformLoginHandler: new CozytouchLoginHandler(
+            'XXX', // your user account
+            'XXX'  // your password
+        ),
         polling: {
             always: false,
             interval: 1000
@@ -25,6 +27,7 @@ async function fetchAllHouse(): Promise<Setup> {
     });
     return api.getSetup();
 }
+
 // Execute the task
 fetchAllHouse()
     .then(console.log)
@@ -37,8 +40,10 @@ Get all devices of type 'WaterHeatingSystem'
 async function getAllWaterHeatingSystem(): Promise<APIObject[]> {
     const api: API = new API({
         host: 'ha110-1.overkiz.com', // Cozytouch host
-        user: 'XXX', // your user account
-        password: 'XXX', // your password
+        platformLoginHandler: new CozytouchLoginHandler(
+            'XXX', // your user account
+            'XXX'  // your password
+        ),
         polling: {
             always: false,
             interval: 1000
